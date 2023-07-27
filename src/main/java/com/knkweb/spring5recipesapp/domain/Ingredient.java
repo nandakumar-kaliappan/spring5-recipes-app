@@ -13,7 +13,7 @@ public class Ingredient {
     private String description;
     private BigDecimal amount;
     @OneToOne(fetch = FetchType.EAGER)
-    private UnitOfMeasurement unitOfMeasurement;
+    private UnitOfMeasure unitOfMeasure;
 
     public Long getId() {
         return id;
@@ -47,11 +47,11 @@ public class Ingredient {
         this.amount = amount;
     }
 
-    public UnitOfMeasurement getUnitOfMeasurement() {
-        return unitOfMeasurement;
+    public UnitOfMeasure getUnitOfMeasure() {
+        return unitOfMeasure;
     }
 
-    public void setUnitOfMeasurement(UnitOfMeasurement unitOfMeasurement) {
-        this.unitOfMeasurement = unitOfMeasurement;
+    public void setUnitOfMeasure(UnitOfMeasure unitOfMeasure) {
+        this.unitOfMeasure = unitOfMeasure;
     }
 }
