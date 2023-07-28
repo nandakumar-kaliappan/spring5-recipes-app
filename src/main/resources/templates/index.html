@@ -6,5 +6,22 @@
 </head>
 <body>
     <h2 th:text="'vanakkam'"> Welcome </h2>
+    <br>
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Recipe</th>
+        <th>Notes</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="recipe:${recipes}">
+        <td th:text="${recipe.id}">id</td>
+        <td th:text="${recipe.description}"></td>
+        <td th:text="${recipe.notes.recipeNotes}"></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>
