@@ -4,13 +4,16 @@ import com.knkweb.spring5recipesapp.domain.*;
 import com.knkweb.spring5recipesapp.repositories.CategoryRepository;
 import com.knkweb.spring5recipesapp.repositories.RecipeRepository;
 import com.knkweb.spring5recipesapp.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.*;
 
+@Slf4j
 @Component
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
     private final RecipeRepository recipeRepository;
@@ -24,11 +27,14 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         this.recipeRepository = recipeRepository;
         this.categoryRepository = categoryRepository;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
+        log.debug("Bootstrap : Instantiated");
      }
 
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        log.debug("Bootstrap : Bootstrap called");
         recipeRepository.saveAll(getRecipes());
     }
 
@@ -51,6 +57,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 
         UnitOfMeasure tableSpoonUom = tableSpoonUomOptional.get();
         UnitOfMeasure cupUom = cupUomOptional.get();
+        log.debug("Bootstrap : UoMs fetched");
 
         //picking Category from DB
         Optional<Category> drinksCategoryOptional = categoryRepository.findByDescription("Drinks");
@@ -72,6 +79,8 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
             throw new RuntimeException("Expected Category not found Exception");
         }
         Category mexicanCategory = mexicanCategoryOptional.get();
+
+        log.debug("Bootstrap : Category fetched");
 
         //Creating two new recipe
             //1. Tea
@@ -107,6 +116,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         List<Recipe> recipes = new ArrayList<>(2);
         recipes.add(tea);
         recipes.add(coffee);
+        log.debug("Bootstrap : Recipes loaded - end");
 
 
 
