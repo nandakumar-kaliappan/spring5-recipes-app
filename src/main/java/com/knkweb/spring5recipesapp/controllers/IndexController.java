@@ -21,6 +21,6 @@ public class IndexController {
         log.debug("IndexController : Received Request to indexHandler()");
         model.addAttribute("recipes", recipeService.getRecipes());
         log.debug("IndexController : forwarding to index.html");
-        return "index";
+        return "index1";
     }
 }
