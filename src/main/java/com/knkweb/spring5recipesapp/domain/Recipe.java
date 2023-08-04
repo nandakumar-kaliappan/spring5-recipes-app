@@ -9,9 +9,12 @@ import java.util.Set;
 /**
  * Created by jt on 6/13/17.
  */
-@Data
-@EqualsAndHashCode(exclude = {"notes","ingredients","categories"})
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Builder
 public class Recipe {
 
     @Id
@@ -53,9 +56,6 @@ public class Recipe {
         this.prepTime = prepTime;
         this.servings = servings;
         this.directions = directions;
-    }
-
-    public Recipe() {
     }
 
     protected boolean canEqual(final Object other) {
