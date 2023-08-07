@@ -31,6 +31,7 @@ public class Recipe {
     @Lob
     private String directions;
 
+    @Builder.Default
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients = new HashSet<>();
 
@@ -44,7 +45,7 @@ public class Recipe {
     private Notes notes;
 
 
-
+    @Builder.Default
     @ManyToMany
     @JoinTable(name = "recipe_category", joinColumns = @JoinColumn(name = "recipe_id"),
     inverseJoinColumns = @JoinColumn(name = "category_id"))

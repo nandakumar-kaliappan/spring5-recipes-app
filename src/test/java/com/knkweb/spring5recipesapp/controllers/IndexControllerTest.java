@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -53,13 +54,19 @@ class IndexControllerTest {
         recipes.add(Recipe.builder().id(2L).build());
 //        recipes.add(Recipe.builder().id(3L).build());
         controller = new IndexController(recipeService);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setPrefix("/WEB-INF/jsp/view/");
+        viewResolver.setSuffix(".jsp");
+
+        mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setViewResolvers(viewResolver)
+                .build();
     }
 
     @Test
     void indexHandler() {
         String view = controller.indexHandler(model);
-        assertEquals("index1", view);
+        assertEquals("index", view);
         verify(recipeService, times(1)).getRecipes();
         verify(model, times(1)).addAttribute(eq("recipes"), anySet());
 
@@ -86,7 +93,7 @@ class IndexControllerTest {
         when(recipeService.getRecipes()).thenReturn(recipes);
         mockMvc.perform(MockMvcRequestBuilders.get("/index"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("index1"))
+                .andExpect(view().name("index"))
                 .andExpect(MockMvcResultMatchers.model().attribute("recipes",hasSize(2)));
     }
 
