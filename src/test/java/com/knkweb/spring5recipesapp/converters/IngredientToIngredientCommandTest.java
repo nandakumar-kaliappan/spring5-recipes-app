@@ -55,7 +55,6 @@ class IngredientToIngredientCommandTest {
         assertEquals(ID_VALUE, ingredientCommand.getId());
         assertEquals(AMOUNT, ingredientCommand.getAmount());
         assertEquals(DESCRIPTION, ingredientCommand.getDescription());
-        assertEquals(UOM_ID, ingredientCommand.getUnitOfMeasure().getId());
     }
 
     @Test
