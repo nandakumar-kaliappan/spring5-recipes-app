@@ -12,7 +12,7 @@ public class CategoryCommandToCategory implements Converter<CategoryCommand, Cat
         if (source == null){
             return null;
         }
-        Category category =
+        final Category category =
                 Category.builder().id(source.getId()).description(source.getDescription()).build();
         return category;
     }
