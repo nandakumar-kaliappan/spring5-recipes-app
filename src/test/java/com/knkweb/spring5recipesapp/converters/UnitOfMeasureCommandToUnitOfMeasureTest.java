@@ -16,7 +16,7 @@ class UnitOfMeasureCommandToUnitOfMeasureTest {
     UnitOfMeasureCommandToUnitOfMeasure converter;
 
     public static final String DESCRIPTION = "description";
-    public static final Long LONG_VALUE = new Long(1L);
+    public static final Long LONG_VALUE = 1L;
 
     @BeforeEach
     void setUp() {
