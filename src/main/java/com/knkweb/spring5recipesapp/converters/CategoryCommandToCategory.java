@@ -9,6 +9,11 @@ import org.springframework.stereotype.Component;
 public class CategoryCommandToCategory implements Converter<CategoryCommand, Category> {
     @Override
     public Category convert(CategoryCommand source) {
-        return null;
+        if (source == null){
+            return null;
+        }
+        Category category =
+                Category.builder().id(source.getId()).description(source.getDescription()).build();
+        return category;
     }
 }
