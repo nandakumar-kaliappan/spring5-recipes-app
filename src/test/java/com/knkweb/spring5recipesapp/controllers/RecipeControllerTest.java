@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -45,7 +46,7 @@ class RecipeControllerTest {
         Long id = 4L;
         Recipe recipe = Recipe.builder().id(id).build();
         when(recipeService.findByid(eq(id))).thenReturn(recipe);;
-        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/show/"+id))
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/"+id+"/show/"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("recipe/show"))
                 .andExpect(MockMvcResultMatchers.model().attribute("recipe",notNullValue()))
@@ -64,17 +65,20 @@ class RecipeControllerTest {
     }
 
     @Test
-    void saveOrUpdate() throws Exception{
+    void saveOrUpdateForSave() throws Exception{
 //        given
         RecipeCommand recipeCommand = RecipeCommand.builder().id(5L).build();
         when(recipeService.saveRecipeCommand(any())).thenReturn(recipeCommand);
 
 //        when
-        mockMvc.perform(MockMvcRequestBuilders.post("/recipe/"))
+        mockMvc.perform(MockMvcRequestBuilders.post("/recipe/")
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .param("id","")
+                    .param("description", "Some Description"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.status().is(302))
                 .andExpect(MockMvcResultMatchers.view().name(
-                        "redirect:/recipe/show/"+recipeCommand.getId()));
+                        "redirect:/recipe/"+recipeCommand.getId()+"/show/"));
     }
 
 

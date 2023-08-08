@@ -19,7 +19,7 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @RequestMapping("/recipe/show/{id}")
+    @RequestMapping("/recipe/{id}/show/")
     public String showMyId(@PathVariable String id, Model model){
         model.addAttribute("recipe", recipeService.findByid(Long.valueOf(id)));
         return "recipe/show";
@@ -34,6 +34,6 @@ public class RecipeController {
     @PostMapping("/recipe/")
     public String saveOrUpdate(@ModelAttribute RecipeCommand inRecipeCommand){
         RecipeCommand outRecipeCommand = recipeService.saveRecipeCommand(inRecipeCommand);
-        return "redirect:/recipe/show/"+outRecipeCommand.getId();
+        return "redirect:/recipe/"+outRecipeCommand.getId()+"/show/";
     }
 }
