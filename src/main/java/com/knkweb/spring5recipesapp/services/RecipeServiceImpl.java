@@ -1,10 +1,13 @@
 package com.knkweb.spring5recipesapp.services;
 
+import com.knkweb.spring5recipesapp.commands.RecipeCommand;
+import com.knkweb.spring5recipesapp.converters.RecipeCommandToRecipe;
+import com.knkweb.spring5recipesapp.converters.RecipeToRecipeCommand;
 import com.knkweb.spring5recipesapp.domain.Recipe;
 import com.knkweb.spring5recipesapp.repositories.RecipeRepository;
-import org.springframework.remoting.RemoteTimeoutException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -12,9 +15,15 @@ import java.util.Set;
 @Service
 public class RecipeServiceImpl implements RecipeService {
     private final RecipeRepository recipeRepository;
+    private final RecipeCommandToRecipe recipeCommandToRecipe;
+    private final RecipeToRecipeCommand recipeToRecipeCommand;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository,
+                             RecipeCommandToRecipe recipeCommandToRecipe,
+                             RecipeToRecipeCommand recipeToRecipeCommand) {
         this.recipeRepository = recipeRepository;
+        this.recipeCommandToRecipe = recipeCommandToRecipe;
+        this.recipeToRecipeCommand = recipeToRecipeCommand;
     }
 
     @Override
@@ -31,6 +40,15 @@ public class RecipeServiceImpl implements RecipeService {
             throw new RuntimeException("Recipe not found");
         }
         return recipe.get();
+    }
+
+    @Override
+    @Transactional
+    public RecipeCommand saveRecipeCommand(RecipeCommand inRecipeCommand) {
+        Recipe detachedRecipe = recipeCommandToRecipe.convert(inRecipeCommand);
+        Recipe savedRecipe = recipeRepository.save(detachedRecipe);
+        RecipeCommand outRecipeCommand = recipeToRecipeCommand.convert(savedRecipe);
+        return outRecipeCommand;
     }
 
 

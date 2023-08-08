@@ -52,7 +52,7 @@ class RecipeServiceImplTest {
         assertEquals(1L, recipeService.findByid(1L).getId());
         verify(recipeRepository,times(1)).findById(eq(1L));
         verifyNoMoreInteractions(recipeRepository);
-
-
     }
+
+
 }

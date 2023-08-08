@@ -1,7 +1,10 @@
 package com.knkweb.spring5recipesapp.controllers;
 
+import com.knkweb.spring5recipesapp.commands.RecipeCommand;
 import com.knkweb.spring5recipesapp.domain.Recipe;
 import com.knkweb.spring5recipesapp.services.RecipeService;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,4 +52,31 @@ class RecipeControllerTest {
                 .andExpect(MockMvcResultMatchers.model().attribute("recipe",recipe));
         verify(recipeService, only()).findByid(eq(id));
     }
+
+    @Test
+    void newRecipe() throws Exception{
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/new"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.model().attribute("recipeCommand",
+                        Matchers.isA(RecipeCommand.class) ))
+                .andExpect(MockMvcResultMatchers.view().name("recipe/recipeform"));
+    }
+
+    @Test
+    void saveOrUpdate() throws Exception{
+//        given
+        RecipeCommand recipeCommand = RecipeCommand.builder().id(5L).build();
+        when(recipeService.saveRecipeCommand(any())).thenReturn(recipeCommand);
+
+//        when
+        mockMvc.perform(MockMvcRequestBuilders.post("/recipe/"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.status().is(302))
+                .andExpect(MockMvcResultMatchers.view().name(
+                        "redirect:/recipe/show/"+recipeCommand.getId()));
+    }
+
+
+
 }
