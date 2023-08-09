@@ -1,12 +1,15 @@
 package com.knkweb.spring5recipesapp.services;
 
 import com.knkweb.spring5recipesapp.commands.RecipeCommand;
+import com.knkweb.spring5recipesapp.converters.RecipeCommandToRecipe;
+import com.knkweb.spring5recipesapp.converters.RecipeToRecipeCommand;
 import com.knkweb.spring5recipesapp.domain.Recipe;
 import com.knkweb.spring5recipesapp.repositories.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -23,6 +26,12 @@ class RecipeServiceImplTest {
 
     @Mock
     RecipeRepository recipeRepository;
+
+    @Mock
+    RecipeCommandToRecipe recipeCommandToRecipe;
+
+    @Mock
+    RecipeToRecipeCommand recipeToRecipeCommand;
 
     @InjectMocks
     RecipeServiceImpl recipeService;
@@ -68,7 +77,9 @@ class RecipeServiceImplTest {
 //        given
         ArgumentCaptor<Long> argumentCaptor = ArgumentCaptor.forClass(Long.class);
         Long ID = 1L;
-        when(recipeRepository.findById(same(ID))).thenReturn(Optional.of(Recipe.builder().id(ID).build()));
+        Recipe recipe = Recipe.builder().id(ID).build();
+        when(recipeRepository.findById(same(ID))).thenReturn(Optional.of(recipe));
+        when(recipeToRecipeCommand.convert(any())).thenReturn(RecipeCommand.builder().id(ID).build());
 
 //        when
         RecipeCommand recipeCommand = recipeService.findRecipeCommandById(ID);
@@ -76,8 +87,13 @@ class RecipeServiceImplTest {
 //        then
         assertNotNull(recipeCommand);
         assertEquals(ID, recipeCommand.getId());
-        verify(recipeRepository,times(1)).findById(eq(ID));
+        InOrder order = inOrder(recipeToRecipeCommand, recipeRepository);
+        order.verify(recipeRepository,times(1)).findById(eq(ID));
+        order.verify(recipeToRecipeCommand,times(1)).convert(recipe);
         verifyNoMoreInteractions(recipeRepository);
+        verifyNoMoreInteractions(recipeToRecipeCommand);
+
+
     }
 
 
