@@ -25,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(MockitoExtension.class)
 class RecipeControllerTest {
@@ -48,8 +50,8 @@ class RecipeControllerTest {
         Recipe recipe = Recipe.builder().id(id).build();
         when(recipeService.findByid(eq(id))).thenReturn(recipe);;
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/"+id+"/show/"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("recipe/show"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/show"))
                 .andExpect(MockMvcResultMatchers.model().attribute("recipe",notNullValue()))
                 .andExpect(MockMvcResultMatchers.model().attribute("recipe",recipe));
         verify(recipeService, only()).findByid(eq(id));
@@ -59,10 +61,10 @@ class RecipeControllerTest {
     void newRecipe() throws Exception{
 
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/new"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.model().attribute("recipeCommand",
                         Matchers.isA(RecipeCommand.class) ))
-                .andExpect(MockMvcResultMatchers.view().name("recipe/recipeform"));
+                .andExpect(view().name("recipe/recipeform"));
     }
 
     @Test
@@ -73,8 +75,8 @@ class RecipeControllerTest {
 
 
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/"+ID+"/update"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("recipe/recipeform"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/recipeform"))
                 .andExpect(MockMvcResultMatchers.model().attribute("recipeCommand", recipeCommand));
 
     }
@@ -90,10 +92,19 @@ class RecipeControllerTest {
                     .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                     .param("id","")
                     .param("description", "Some Description"))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.status().is(302))
-                .andExpect(MockMvcResultMatchers.view().name(
+                .andExpect(status().is3xxRedirection())
+                .andExpect(status().is(302))
+                .andExpect(view().name(
                         "redirect:/recipe/"+recipeCommand.getId()+"/show/"));
+    }
+
+    @Test
+    public void testDeleteAction() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/"));
+
+        verify(recipeService, times(1)).deleteById(anyLong());
     }
 
 
