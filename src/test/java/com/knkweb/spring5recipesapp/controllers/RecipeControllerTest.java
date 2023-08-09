@@ -70,14 +70,13 @@ class RecipeControllerTest {
         final Long ID = 2L;
         RecipeCommand recipeCommand = RecipeCommand.builder().id(2L).build();
         when(recipeService.findRecipeCommandById(ID)).thenReturn(recipeCommand);
-        ArgumentCaptor<RecipeCommand> argumentCaptor = ArgumentCaptor.forClass(RecipeCommand.class);
+
 
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/"+ID+"/update"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("recipe/recipeform"))
-                .andExpect(MockMvcResultMatchers.model().attribute("recipeCommand",
-                        argumentCaptor.capture() ));
-        assertEquals(ID, argumentCaptor.getValue());
+                .andExpect(MockMvcResultMatchers.model().attribute("recipeCommand", recipeCommand));
+
     }
 
     @Test

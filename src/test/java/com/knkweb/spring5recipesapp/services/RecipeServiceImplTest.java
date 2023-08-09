@@ -92,8 +92,6 @@ class RecipeServiceImplTest {
         order.verify(recipeToRecipeCommand,times(1)).convert(recipe);
         verifyNoMoreInteractions(recipeRepository);
         verifyNoMoreInteractions(recipeToRecipeCommand);
-
-
     }
 
 
