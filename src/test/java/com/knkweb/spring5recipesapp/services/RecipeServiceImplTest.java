@@ -1,5 +1,6 @@
 package com.knkweb.spring5recipesapp.services;
 
+import com.knkweb.spring5recipesapp.commands.RecipeCommand;
 import com.knkweb.spring5recipesapp.domain.Recipe;
 import com.knkweb.spring5recipesapp.repositories.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,10 +48,35 @@ class RecipeServiceImplTest {
 
     @Test
     void findByid(){
+
+        //        given
         ArgumentCaptor<Long> argumentCaptor = ArgumentCaptor.forClass(Long.class);
-        when(recipeRepository.findById(same(1L))).thenReturn(Optional.of(Recipe.builder().id(1L).build()));
-        assertEquals(1L, recipeService.findByid(1L).getId());
-        verify(recipeRepository,times(1)).findById(eq(1L));
+        Long ID = 1L;
+        when(recipeRepository.findById(same(ID))).thenReturn(Optional.of(Recipe.builder().id(ID).build()));
+
+//        when
+        Recipe recipe = recipeService.findByid(ID);
+
+//        then
+        assertEquals(ID, recipe.getId());
+        verify(recipeRepository,times(1)).findById(eq(ID));
+        verifyNoMoreInteractions(recipeRepository);
+    }
+
+    @Test
+    void findRecipeCommandById(){
+//        given
+        ArgumentCaptor<Long> argumentCaptor = ArgumentCaptor.forClass(Long.class);
+        Long ID = 1L;
+        when(recipeRepository.findById(same(ID))).thenReturn(Optional.of(Recipe.builder().id(ID).build()));
+
+//        when
+        RecipeCommand recipeCommand = recipeService.findRecipeCommandById(ID);
+
+//        then
+        assertNotNull(recipeCommand);
+        assertEquals(ID, recipeCommand.getId());
+        verify(recipeRepository,times(1)).findById(eq(ID));
         verifyNoMoreInteractions(recipeRepository);
     }
 
