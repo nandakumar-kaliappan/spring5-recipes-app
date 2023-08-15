@@ -1,6 +1,8 @@
 package com.knkweb.spring5recipesapp.controllers;
 
+import com.knkweb.spring5recipesapp.commands.IngredientCommand;
 import com.knkweb.spring5recipesapp.commands.RecipeCommand;
+import com.knkweb.spring5recipesapp.services.IngredientService;
 import com.knkweb.spring5recipesapp.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,9 @@ class IngredientControllerTest {
 
     @Mock
     RecipeService recipeService;
+
+    @Mock
+    IngredientService ingredientService;
 
     @InjectMocks
     IngredientController ingredientController;
@@ -51,12 +56,14 @@ class IngredientControllerTest {
 
     @Test
     void showRecipeIngredient() throws Exception {
-
+        IngredientCommand ingredientCommand = IngredientCommand.builder().id(1L).build();
+        when(ingredientService.findByRecipeIdAndIngredientId(anyLong(),anyLong()))
+                .thenReturn(ingredientCommand);
 
         mockMvc.perform(get("/recipe/1/ingredient/1/show"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/ingredient/show"))
-                .andExpect(model().attributeExists("ingredient"));
+                .andExpect(model().attribute("ingredient",ingredientCommand));
 
     }
 }
