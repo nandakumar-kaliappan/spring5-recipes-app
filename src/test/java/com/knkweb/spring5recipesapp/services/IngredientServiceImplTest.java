@@ -23,19 +23,12 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class IngredientServiceImplTest {
-    private final IngredientToIngredientCommand ingredientToIngredientCommand;
-
     @Mock
     RecipeRepository recipeRepository;
 
     @InjectMocks
     IngredientServiceImpl ingredientService;
 
-
-    //init converters
-    public IngredientServiceImplTest() {
-        this.ingredientToIngredientCommand = new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand());
-    }
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -51,20 +44,21 @@ class IngredientServiceImplTest {
         ingredient1.setId(1L);
 
         Ingredient ingredient2 = new Ingredient();
-        ingredient2.setId(1L);
+        ingredient2.setId(2L);
 
         Ingredient ingredient3 = new Ingredient();
         ingredient3.setId(3L);
 
-        recipe.getIngredients().add(ingredient1);
-        recipe.getIngredients().add(ingredient2);
-        recipe.getIngredients().add(ingredient3);
+        recipe.addIngredient(ingredient1);
+        recipe.addIngredient(ingredient2);
+        recipe.addIngredient(ingredient3);
         Optional<Recipe> recipeOptional = Optional.of(recipe);
 
         when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
 
         //then
-        IngredientCommand ingredientCommand = ingredientService.findByRecipeIdAndIngredientId(1L, 3L);
+        IngredientCommand ingredientCommand = ingredientService.findByRecipeIdAndIngredientId(1L,
+                3L);
 
         //when
         assertEquals(Long.valueOf(3L), ingredientCommand.getId());

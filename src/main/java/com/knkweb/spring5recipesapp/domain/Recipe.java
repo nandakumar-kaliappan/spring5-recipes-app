@@ -58,6 +58,10 @@ public class Recipe {
         this.servings = servings;
         this.directions = directions;
     }
+    public void addIngredient(Ingredient ingredient){
+        this.getIngredients().add(ingredient);
+        ingredient.setRecipe(this);
+    }
 
     protected boolean canEqual(final Object other) {
         return other instanceof Recipe;
