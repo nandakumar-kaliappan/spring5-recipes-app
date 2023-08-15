@@ -48,4 +48,15 @@ class IngredientControllerTest {
         //then
         verify(recipeService, times(1)).findRecipeCommandById(anyLong());
     }
+
+    @Test
+    void showRecipeIngredient() throws Exception {
+
+
+        mockMvc.perform(get("/recipe/1/ingredient/1/show"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/ingredient/show"))
+                .andExpect(model().attributeExists("ingredient"));
+
+    }
 }

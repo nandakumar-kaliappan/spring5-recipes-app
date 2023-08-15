@@ -24,4 +24,8 @@ public class IngredientController {
                 recipeService.findRecipeCommandById(Long.valueOf(recipeId)));
         return "recipe/ingredient/list";
     }
+
+    public String showRecipeIngredient(){
+        return  null;
+    }
 }

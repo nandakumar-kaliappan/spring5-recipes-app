@@ -2,13 +2,14 @@ package com.knkweb.spring5recipesapp.converters;
 
 import com.knkweb.spring5recipesapp.commands.IngredientCommand;
 import com.knkweb.spring5recipesapp.commands.UnitOfMeasureCommand;
-import com.knkweb.spring5recipesapp.domain.Category;
 import com.knkweb.spring5recipesapp.domain.Ingredient;
 import com.knkweb.spring5recipesapp.domain.Recipe;
-import com.knkweb.spring5recipesapp.domain.UnitOfMeasure;
+import com.knkweb.spring5recipesapp.services.RecipeService;
+import com.knkweb.spring5recipesapp.services.RecipeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -19,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class IngredientCommandToIngredientTest {
 
     IngredientCommandToIngredient converter;
+    @Mock
+    RecipeService recipeService;
     public static final Recipe RECIPE = new Recipe();
     public static final BigDecimal AMOUNT = new BigDecimal("1");
     public static final String DESCRIPTION = "Cheeseburger";
@@ -29,7 +32,8 @@ class IngredientCommandToIngredientTest {
 
     @BeforeEach
     void setUp() {
-        converter = new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure());
+        converter = new IngredientCommandToIngredient(
+                new UnitOfMeasureCommandToUnitOfMeasure());
     }
 
     @Test
@@ -46,7 +50,7 @@ class IngredientCommandToIngredientTest {
     void convertWithoutUoM() {
 //        given
         IngredientCommand ingredientCommand = IngredientCommand.builder().id(ID_VALUE).description(DESCRIPTION).
-                amount(AMOUNT).recipe(RECIPE).unitOfMeasure(null).build();
+                amount(AMOUNT).recipeId(RECIPE.getId()).unitOfMeasure(null).build();
 //        when
         Ingredient ingredient =converter.convert(ingredientCommand);
 
@@ -63,7 +67,7 @@ class IngredientCommandToIngredientTest {
 //        given
         UnitOfMeasureCommand unitOfMeasure= UnitOfMeasureCommand.builder().id(UOM_ID).build();
         IngredientCommand ingredientCommand = IngredientCommand.builder().id(ID_VALUE).description(DESCRIPTION).
-                amount(AMOUNT).recipe(RECIPE).unitOfMeasure(unitOfMeasure).build();
+                amount(AMOUNT).recipeId(RECIPE.getId()).unitOfMeasure(unitOfMeasure).build();
 //        when
         Ingredient ingredient =converter.convert(ingredientCommand);
 

@@ -4,12 +4,13 @@ import com.knkweb.spring5recipesapp.commands.CategoryCommand;
 import com.knkweb.spring5recipesapp.commands.IngredientCommand;
 import com.knkweb.spring5recipesapp.commands.NotesCommand;
 import com.knkweb.spring5recipesapp.commands.RecipeCommand;
-import com.knkweb.spring5recipesapp.domain.Category;
 import com.knkweb.spring5recipesapp.domain.Difficulty;
 import com.knkweb.spring5recipesapp.domain.Recipe;
+import com.knkweb.spring5recipesapp.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class RecipeCommandToRecipeTest {
 
     RecipeCommandToRecipe converter;
+
+
     public static final Long RECIPE_ID = 1L;
     public static final Integer COOK_TIME = Integer.valueOf("5");
     public static final Integer PREP_TIME = Integer.valueOf("7");
@@ -36,7 +39,7 @@ class RecipeCommandToRecipeTest {
     @BeforeEach
     void setUp() {
         converter = new RecipeCommandToRecipe(new NotesCommandToNotes(),
-                new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure()),
+                new IngredientCommandToIngredient( new UnitOfMeasureCommandToUnitOfMeasure()),
                 new CategoryCommandToCategory());
     }
 

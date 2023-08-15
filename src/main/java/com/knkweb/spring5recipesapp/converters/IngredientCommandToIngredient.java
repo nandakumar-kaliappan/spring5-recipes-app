@@ -1,9 +1,9 @@
 package com.knkweb.spring5recipesapp.converters;
 
 import com.knkweb.spring5recipesapp.commands.IngredientCommand;
-import com.knkweb.spring5recipesapp.commands.UnitOfMeasureCommand;
 import com.knkweb.spring5recipesapp.domain.Ingredient;
 import com.knkweb.spring5recipesapp.domain.UnitOfMeasure;
+import com.knkweb.spring5recipesapp.services.RecipeService;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
@@ -29,6 +29,7 @@ public class IngredientCommandToIngredient implements Converter<IngredientComman
         Ingredient ingredient =
                 Ingredient.builder().unitOfMeasure(unitOfMeasure).amount(source.getAmount())
                         .description(source.getDescription()).id(source.getId()).build();
+
         return ingredient;
     }
 }
