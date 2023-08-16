@@ -58,9 +58,10 @@ public class Recipe {
         this.servings = servings;
         this.directions = directions;
     }
-    public void addIngredient(Ingredient ingredient){
+    public Recipe addIngredient(Ingredient ingredient){
         this.getIngredients().add(ingredient);
         ingredient.setRecipe(this);
+        return this;
     }
 
     protected boolean canEqual(final Object other) {
