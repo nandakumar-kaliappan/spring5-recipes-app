@@ -65,11 +65,15 @@
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label><b>Difficulty:</b></label>
-                                    <select class="form-control">
-                                        <option>Easy</option>
-                                        <option>Medium</option>
-                                        <option>Hard</option>
+                                    <select class="form-control" th:field="*{difficulty}" >
+                                        <option
+                                                th:each="d:${T(com.knkweb.spring5recipesapp.domain.Difficulty).values()}"
+                                                th:value="${d.name()}"
+                                                th:text="${d.name()}">
+                                            Easy</option>
                                     </select>
+
+
                                 </div>
                             </div>
                             <div class="row">

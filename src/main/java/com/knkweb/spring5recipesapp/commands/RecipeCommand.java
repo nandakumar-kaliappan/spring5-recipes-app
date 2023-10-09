@@ -21,7 +21,7 @@ public class RecipeCommand {
     private String url;
     private String directions;
     @Builder.Default
-    private Set<IngredientCommand> ingredients = new HashSet<>();
+        private Set<IngredientCommand> ingredients = new HashSet<>();
     private Difficulty difficulty;
     private NotesCommand notes;
     @Builder.Default
