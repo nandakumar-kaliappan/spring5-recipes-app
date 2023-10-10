@@ -19,6 +19,7 @@ public class RecipeCommand {
     private Integer servings;
     private String source;
     private String url;
+    private Byte[] image;
     private String directions;
     @Builder.Default
         private Set<IngredientCommand> ingredients = new HashSet<>();
